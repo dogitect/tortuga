@@ -1,0 +1,88 @@
+name: Update Surge Files
+
+on:
+  schedule:
+    - cron: '0 4 * * 4'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-rulesets:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: direct.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt
+          - name: proxy.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/proxy.txt
+          - name: reject.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/reject.txt
+          - name: private.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/private.txt
+          - name: apple.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/apple.txt
+          - name: icloud.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/icloud.txt
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create rulesets directory
+        run: mkdir -p surge/rulesets
+
+      - name: Download ruleset file
+        run: |
+          curl -o surge/rulesets/${{ matrix.name }} ${{ matrix.url }}
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add surge/rulesets/${{ matrix.name }}
+          git commit -m "chore: update ${{ matrix.name }} ${{ github.run_id }}" || echo "No changes to commit"
+          for i in {1..5}; do
+            git pull --rebase
+            git push && break || sleep 10
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  update-geoip:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: Country.mmdb
+            url: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country.mmdb
+          - name: Country-only-cn-private.mmdb
+            url: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-only-cn-private.mmdb
+          - name: Country-asn.mmdb
+            url: https://raw.githubusercontent.com/Loyalsoldier/geoip/release/Country-asn.mmdb
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create geoip directory
+        run: mkdir -p surge/geoip
+
+      - name: Download geoip file
+        run: |
+          curl -o surge/geoip/${{ matrix.name }} ${{ matrix.url }}
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add surge/geoip/${{ matrix.name }}
+          git commit -m "chore: update ${{ matrix.name }}" || echo "No changes to commit"
+          for i in {1..5}; do
+            git pull --rebase
+            git push && break || sleep 10
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
