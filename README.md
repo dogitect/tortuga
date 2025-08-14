@@ -26,4 +26,4 @@ Pull requests are currently **not accepted**.
 
 ## License
 
-MIT © liyangxia
+MIT © dogitect
