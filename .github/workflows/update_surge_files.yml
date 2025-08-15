@@ -15,17 +15,19 @@ jobs:
       matrix:
         include:
           - name: direct.txt
-            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/direct.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/direct.txt
           - name: proxy.txt
-            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/proxy.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/proxy.txt
           - name: reject.txt
-            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/reject.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/reject.txt
           - name: private.txt
-            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/private.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/private.txt
           - name: apple.txt
-            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/apple.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/apple.txt
           - name: icloud.txt
-            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/icloud.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/icloud.txt
+          - name: gfw.txt
+            url: https://raw.githubusercontent.com/Loyalsoldier/surge-rules/release/ruleset/gfw.txt
 
     steps:
       - name: Checkout repository
