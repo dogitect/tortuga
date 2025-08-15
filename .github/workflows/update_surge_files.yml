@@ -51,6 +51,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  update-telegram:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Download and process Telegram CIDR file
+        run: |
+          curl -s https://core.telegram.org/resources/cidr.txt | while IFS= read -r line; do
+            if [[ -n "$line" ]]; then
+              if [[ "$line" =~ : ]]; then
+                echo "IP-CIDR6,$line,no-resolve"
+              else
+                echo "IP-CIDR,$line,no-resolve"
+              fi
+            fi
+          done > surge/rulesets/telegram.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add surge/rulesets/telegram.txt
+          git commit -m "chore: update telegram.txt ${{ github.run_id }}" || echo "No changes to commit"
+          for i in {1..5}; do
+            git pull --rebase
+            git push && break || sleep 10
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   update-geoip:
     runs-on: ubuntu-latest
     strategy:
