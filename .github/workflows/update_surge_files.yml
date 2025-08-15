@@ -57,6 +57,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Create rulesets directory
+        run: mkdir -p surge/rulesets
+
       - name: Download and process Telegram CIDR file
         run: |
           curl -s https://core.telegram.org/resources/cidr.txt | while IFS= read -r line; do
@@ -96,7 +99,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Create geoip directory
         run: mkdir -p surge/geoip
