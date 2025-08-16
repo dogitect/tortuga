@@ -1,5 +1,5 @@
-.skycyber.io
-.skycyber.dev
-.akssky.net
-.sherix.io
-.katazo.io
+DOMAIN-SUFFIX,skycyber.io
+DOMAIN-SUFFIX,skycyber.dev
+DOMAIN-SUFFIX,akssky.net
+DOMAIN-SUFFIX,sherix.io
+DOMAIN-SUFFIX,katazo.io
